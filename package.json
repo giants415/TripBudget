@@ -1,0 +1,21 @@
+{
+  "name": "triprate",
+  "version": "1.0.0",
+  "description": "App where users share costs of trip",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Andrew Vinocur",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.6.1",
+    "angular-route": "^1.6.1",
+    "body-parser": "^1.16.0",
+    "bootstrap": "^3.3.7",
+    "express": "^4.14.0",
+    "mongoose": "^4.7.7",
+    "nodemon": "^1.11.0"
+  }
+}
