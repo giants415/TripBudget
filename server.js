@@ -1,8 +1,10 @@
 var express = require('express'),
   app = express();
 
-var users = require('./scripts/routes/users');
-var tripBudgets = require('./scripts/routes/tripBudgets.js');
+// var users = require('/scripts/routes/user.js');
+// var tripBudgets = require('scripts/routes/tripBudgets.js');
+
+app.use(require('./scripts/routes'));
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true}));
@@ -20,9 +22,9 @@ app.use(express.static(__dirname + '/node_modules'));
 
 var db = require('./models');
 
-app.get('/', function homepage(req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
+// app.get('/', function homepage(req, res) {
+//   res.sendFile(__dirname + '/index.html');
+// });
 
 
 app.listen(process.env.PORT || 3000, function () {
