@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
-var path = require('path');
-var routes = require('./scripts/routes');
+// var path = require('path');
+// var routes = require('./scripts/routes');
 var bodyParser = require('body-parser');
 var db = require('./models');
 
@@ -19,15 +19,15 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use('/', routes);
+// app.use('/', routes);
 
 //Allows me to use static files from these folders?
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/node_modules'));
 
-app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/public/views/index.html');
-});
+// app.get('/', function(req, res) {
+//     res.sendFile(__dirname + '/public/views/index.html');
+// });
 
 app.listen(process.env.PORT || 3000, function () {
   console.log('Express server is up and running on http://localhost:3000/');
