@@ -1,8 +1,8 @@
 angular
   .module('tripBudget')
-  .controller('HomepageController', HomepageController);
+  .controller('homepageController', homepageController);
 
-HomepageController.$inject = ['$http', '$scope'];
-function HomepageController($http, $scope){
-  console.log('homepage controller');
+homepageController.$inject = ['$http', '$scope'];
+function homepageController($http, $scope){
+  $scope.text = "Vinokur rules!";
 };

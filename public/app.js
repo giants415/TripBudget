@@ -6,7 +6,7 @@ config.$inject = ['$routeProvider', '$locationProvider'];
 function config($routeProvider, $locationProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'public/views/index.html',
+      templateUrl: '/templates/home.html',
       controller: 'homepageController'
     });
 
