@@ -25,9 +25,9 @@ app.use(function(req, res, next) {
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/node_modules'));
 
-// app.get('/', function(req, res) {
-//     res.sendFile(__dirname + '/public/views/index.html');
-// });
+app.get('/', function homepage(req, res) {
+    res.sendFile(__dirname + '/public/views/index.html');
+});
 
 app.listen(process.env.PORT || 3000, function () {
   console.log('Express server is up and running on http://localhost:3000/');
