@@ -171,16 +171,20 @@ app.get('/tripbudgets/:tripTitle/items', function(req, res){
 });
 
 app.post('/tripbudgets/:tripTitle/items', function(req, res){
-  var newItem = new Item({
-    title: req.body.title,
-    cost: req.body.cost,
-    description: req.body.description
-  });
-
+  TripBudget.findOne({tripTitle: req.params.tripTitle}, function(err, selectedTripBudget){
+    var newItem = new Item({
+      title: req.body.title,
+      cost: req.body.cost,
+      description: req.body.description
+    });
+    selectedTripBudget.tripItem.push(newItem);
+  })
+//working on moving this route to be more similar to the addcomment route
   newItem.save(function(err, item){
     if (err) {
       res.send(err);
     } else {
+      console.log(newItem);
       res.send(newItem);
     };
   });
