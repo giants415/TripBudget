@@ -18,6 +18,9 @@ app.use(function(req, res, next) {
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/node_modules'));
 
+
+//// USER ROUTES ////
+
 app.get('/users', function(req, res){
   User.find({}).exec(function(err, users){
     if (err) {
@@ -84,7 +87,72 @@ app.delete('/users/:username', function(req, res){
   });
 });
 
+//// TRIPBUDGET ROUTES ////
 
+app.get('/tripbudgets', function(req, res){
+  TripBudget.find({}).exec(function(err, tripBudgets){
+    if (err) {
+      res.send(err);
+    } else {
+      res.send({data:tripBudgets}, 200);
+    }
+  });
+});
+
+app.get('/tripbudgets/:tripTitle', function(req, res){
+  TripBudget.findOne({tripTitle: req.params.tripTitle}, function (err, tripBudget){
+    if (err) {
+      res.send(err);
+    } else {
+      res.send({data:tripBudget}, 200);
+    };
+  });
+});
+
+app.post('/tripbudgets', function(req, res){
+  var newTripBudget = new TripBudget({
+    tripTitle: req.body.tripTitle,
+    tripItem: req.body.tripItem
+  });
+
+  newTripBudget.save(function(err, tripBudget){
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(newTripBudget);
+    };
+  });
+});
+
+app.put('/tripbudgets/:tripTitle', function(req, res){
+  TripBudget.findOne({tripTitle: req.params.tripTitle}, function (err, tripBudget){
+    if (err) {
+      res.send(err);
+    } else {
+      var data = {
+        tripTitle: req.body.tripTitle,
+        tripItem: req.body.tripItem
+      };
+      TripBudget.update(tripBudget, data, function(err, updatedTripBudget){
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(updatedTripBudget, 200);
+        };
+      });
+    };
+  });
+});
+
+app.delete('/tripbudgets/:tripTitle', function(req, res){
+  TripBudget.remove({tripTitle: req.params.tripTitle}, function(err, tripBudget){
+    if (err) {
+      res.send(err);
+    } else {
+      res.send({message: 'Trip Budget w/ tripTitle: ' + req.params.tripTitle + ' has been deleted'}, 200);
+    };
+  });
+});
 
 app.listen(process.env.PORT || 3000, function () {
   console.log('Express server is up and running on http://localhost:3000/');
