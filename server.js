@@ -74,7 +74,7 @@ app.put('/users/:username', function(req, res){
   });
 });
 
-app.delete('users/:username', function(req, res){
+app.delete('/users/:username', function(req, res){
   User.remove({username: req.params.username}, function(err, user){
     if (err) {
       res.send(err);
