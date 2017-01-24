@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var db = require('./models');
 var User = require('./models/user.js');
 var TripBudget = require('./models/tripBudget.js');
+var Item = require('./models/tripBudget.js');
 
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
@@ -19,8 +20,9 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/node_modules'));
 
 
-//// USER ROUTES ////
-
+////////////////////////////
+//// TRIPBUDGET ROUTES ////
+//////////////////////////
 app.get('/users', function(req, res){
   User.find({}).exec(function(err, users){
     if (err) {
@@ -87,8 +89,9 @@ app.delete('/users/:username', function(req, res){
   });
 });
 
-//// TRIPBUDGET ROUTES ////
-
+////////////////////////////
+////  BUDGET ROUTES ///////
+//////////////////////////
 app.get('/tripbudgets', function(req, res){
   TripBudget.find({}).exec(function(err, tripBudgets){
     if (err) {
@@ -120,6 +123,65 @@ app.post('/tripbudgets', function(req, res){
       res.send(err);
     } else {
       res.send(newTripBudget);
+    };
+  });
+});
+
+app.put('/tripbudgets/:tripTitle', function(req, res){
+  TripBudget.findOne({tripTitle: req.params.tripTitle}, function (err, tripBudget){
+    if (err) {
+      res.send(err);
+    } else {
+      var data = {
+        tripTitle: req.body.tripTitle,
+        tripItem: req.body.tripItem
+      };
+      TripBudget.update(tripBudget, data, function(err, updatedTripBudget){
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(updatedTripBudget, 200);
+        };
+      });
+    };
+  });
+});
+
+app.delete('/tripbudgets/:tripTitle', function(req, res){
+  TripBudget.remove({tripTitle: req.params.tripTitle}, function(err, tripBudget){
+    if (err) {
+      res.send(err);
+    } else {
+      res.send({message: 'Trip Budget w/ tripTitle: ' + req.params.tripTitle + ' has been deleted'}, 200);
+    };
+  });
+});
+
+////////////////////////////
+////  ITEM ROUTES /////////
+//////////////////////////
+app.get('/tripbudgets/:tripTitle/items', function(req, res){
+  TripBudget.findOne({tripTitle: req.params.tripTitle}, function (err, items){
+    if (err) {
+      res.send(err);
+    } else {
+      res.send({data:items}, 200);
+    };
+  });
+});
+
+app.post('/tripbudgets/:tripTitle/items', function(req, res){
+  var newItem = new Item({
+    title: req.body.title,
+    cost: req.body.cost,
+    description: req.body.description
+  });
+
+  newItem.save(function(err, item){
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(newItem);
     };
   });
 });
