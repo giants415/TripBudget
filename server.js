@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var db = require('./models');
 var User = require('./models/user.js');
 var TripBudget = require('./models/tripBudget.js');
-var Item = require('./models/tripBudget.js');
+var Item = require('./models/tripItem.js');
 
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
@@ -21,7 +21,7 @@ app.use(express.static(__dirname + '/node_modules'));
 
 
 ////////////////////////////
-//// TRIPBUDGET ROUTES ////
+//// USER ROUTES //////////
 //////////////////////////
 app.get('/users', function(req, res){
   User.find({}).exec(function(err, users){
@@ -49,12 +49,16 @@ app.post('/users', function(req, res){
     username: req.body.username,
     trip: req.body.userBudget
   });
+  console.log (newUser);
 
   newUser.save(function(err, user){
     if (err) {
+      console.log('2 ' + newUser);
       res.send(err);
+      console.log ('in the save error');
     } else {
       res.send(user);
+      console.log ('in the save');
     };
   });
 });
@@ -112,17 +116,19 @@ app.get('/tripbudgets/:tripTitle', function(req, res){
   });
 });
 
-app.post('/tripbudgets', function(req, res){
-  var newTripBudget = new TripBudget({
-    tripTitle: req.body.tripTitle,
-    tripItem: req.body.tripItem
-  });
-
-  newTripBudget.save(function(err, tripBudget){
+app.post('/users/:username/tripbudgets', function(req, res){
+  User.findOne({username: req.params.username}, function (err, foundUser) {
     if (err) {
       res.send(err);
     } else {
-      res.send(newTripBudget);
+      var newTripBudget = new TripBudget({
+        tripTitle: req.body.tripTitle,
+        tripItem: req.body.tripItem
+      });
+      foundUser.userBudget.push(newTripBudget);
+      foundUser.save(function (err, savedUser){
+        res.send(newTripBudget);
+      });
     };
   });
 });
@@ -172,21 +178,24 @@ app.get('/tripbudgets/:tripTitle/items', function(req, res){
 
 app.post('/tripbudgets/:tripTitle/items', function(req, res){
   TripBudget.findOne({tripTitle: req.params.tripTitle}, function(err, selectedTripBudget){
+    console.log('1 ' + req.params.tripTitle);
+    /// talking with bill and we both agreed i need to make a model for item and then require it
+    /// in the model for trip budget
     var newItem = new Item({
       title: req.body.title,
       cost: req.body.cost,
       description: req.body.description
     });
     selectedTripBudget.tripItem.push(newItem);
-  })
-//working on moving this route to be more similar to the addcomment route
-  newItem.save(function(err, item){
-    if (err) {
-      res.send(err);
-    } else {
-      console.log(newItem);
-      res.send(newItem);
-    };
+    console.log('2 ' + newItem);
+    newItem.save(function(err, item){
+      if (err) {
+        res.send(err);
+      } else {
+        console.log('3 ' + newItem);
+        res.send(newItem);
+      };
+    });
   });
 });
 

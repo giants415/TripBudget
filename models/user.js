@@ -6,7 +6,7 @@ var TripBudget = require('./tripBudget.js');
 var userSchema = new Schema({
   email: {type: String, required: true},
   username: {type: String, required: true},
-  userBudget: [TripBudget.schema]
+  userBudget: [ TripBudget.schema ]
 });
 
 var User = mongoose.model('User', userSchema);
