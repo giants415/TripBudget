@@ -116,6 +116,16 @@ app.get('/tripbudgets/:tripTitle', function(req, res){
   });
 });
 
+app.get('/users/:username/tripbudgets', function (req,res){
+  User.findOne({username: req.params.username}, function(err, foundUser){
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(foundUser.userBudget);
+    };
+  });
+});
+
 app.post('/users/:username/tripbudgets', function(req, res){
   User.findOne({username: req.params.username}, function (err, foundUser) {
     if (err) {
@@ -133,24 +143,25 @@ app.post('/users/:username/tripbudgets', function(req, res){
   });
 });
 
-app.put('/tripbudgets/:tripTitle', function(req, res){
-  TripBudget.findOne({tripTitle: req.params.tripTitle}, function (err, tripBudget){
-    if (err) {
-      res.send(err);
-    } else {
-      var data = {
-        tripTitle: req.body.tripTitle,
-        tripItem: req.body.tripItem
-      };
-      TripBudget.update(tripBudget, data, function(err, updatedTripBudget){
-        if (err) {
-          res.send(err);
-        } else {
-          res.send(updatedTripBudget, 200);
-        };
-      });
-    };
-  });
+app.put('/users/:username/tripbudgets', function(req, res){
+
+  // TripBudget.findOne({tripTitle: req.params.tripTitle}, {username: req.params.username}, function (err, tripBudget){
+  //   if (err) {
+  //     res.send(err);
+  //   } else {
+  //     var data = {
+  //       tripTitle: req.body.tripTitle,
+  //       tripItem: req.body.tripItem
+  //     };
+  //     TripBudget.update(tripBudget, data, function(err, updatedTripBudget){
+  //       if (err) {
+  //         res.send(err);
+  //       } else {
+  //         res.send(updatedTripBudget, 200);
+  //       };
+  //     });
+  //   };
+  // });
 });
 
 app.delete('/tripbudgets/:tripTitle', function(req, res){
