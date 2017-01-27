@@ -144,7 +144,23 @@ app.post('/users/:username/tripbudgets', function(req, res){
 });
 
 app.put('/users/:username/tripbudgets', function(req, res){
-
+  User.findOne({username: req.params.username}, function(err, foundUser){
+    if (err) {
+      res.send(err);
+    } else {
+      var data = {
+        tripTitle: req.body.tripTitle,
+        tripItem: req.body.tripItem
+      };
+      foundUser.TripBudget.update(user, data, function(err, updatedTripBudget){
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(updatedTripBudget);
+        };
+      });
+    };
+  });
   // TripBudget.findOne({tripTitle: req.params.tripTitle}, {username: req.params.username}, function (err, tripBudget){
   //   if (err) {
   //     res.send(err);
